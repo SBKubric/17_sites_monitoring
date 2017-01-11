@@ -1,0 +1,4 @@
+requests==2.12.4
+pythonwhois==2.4.3
+argparse==1.4.0
+tldextract==2.0.2

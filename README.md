@@ -1,6 +1,34 @@
 # Sites Monitoring Utility
 
-[TODO. There will be project description]
+## Description
+
+There should be a description.
+
+##Installation
+
+The script is written with Python3.
+
+Install the packages from requirements.txt using pip:
+
+```
+pip install -r requirements.txt
+```
+
+**IMPORTANT**: best practice is to use virtualenv. See here: [Link](http://docs.python-guide.org/en/latest/dev/virtualenvs/)
+
+##Example
+
+**INPUT:**
+
+```
+python3 check_sites_health.py
+```
+
+**OUTPUT:**
+
+```
+There should be output
+```
 
 # Project Goals
 
