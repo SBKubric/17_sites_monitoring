@@ -29,9 +29,9 @@ def get_logger(logfile_path):
 
 
 def load_urls4check(path):
-    file = open(path)
+    urls_source = open(path)
     while True:
-        url = file.readline()
+        url = urls_source.readline()
         if not url:
             break
         if '\n' in url:
