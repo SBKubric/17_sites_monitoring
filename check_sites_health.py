@@ -1,10 +1,10 @@
 import pythonwhois
 import requests
 import argparse
+from urllib.parse import urlparse
 from datetime import datetime
 from calendar import monthrange
 import tldextract
-import logging
 
 
 def parse_args():
@@ -14,36 +14,25 @@ def parse_args():
                                                  'domain expiration date.')
     parser.add_argument('source', help='The path to the url list file')
     parser.add_argument('-nr', '--no_redirects', action='store_true', help='Forbid redirection from sites')
-    parser.add_argument('-o', '--output', default='logfile', help='The name of file with results')
     args = parser.parse_args()
     return args
 
 
-def get_logger(logfile_path):
-    logging.basicConfig(format='%(message)s', filename='{}.log'.format(logfile_path), level=logging.INFO)
-    ch = logging.StreamHandler()
-    ch.setLevel(logging.INFO)
-    logger = logging.getLogger()
-    logger.addHandler(ch)
-    return logger
-
-
 def load_urls4check(path):
-    urls_source = open(path)
-    while True:
-        url = urls_source.readline()
-        if not url:
-            break
-        if '\n' in url:
-            url = url[:-1]
-        yield url
+    with open(path) as urls_source:
+        while True:
+            url_string = urls_source.readline()
+            if not url_string:
+                break
+            if '\n' in url_string:
+                url_string = url_string[:-1]
+            url_parts = urlparse(url_string)
+            yield '{}://{}'.format(url_parts.scheme, url_parts.netloc)
 
 
 def is_server_respond_with_200(url, forbid_redirects=False):
     response = requests.get(url, allow_redirects=not forbid_redirects)
-    if response.status_code == 200:
-        return True
-    return False
+    return response.status_code == 200
 
 
 def get_domain_expiration_date(domain_name):
@@ -66,16 +55,13 @@ def is_paid_for_next_month(url):
     else:
         first_day, last_day = monthrange(now_date.year, now_date.month+1)
         due_date = datetime(now_date.year, now_date.month+1, last_day, 23, 0, 0)
-    if dt_exp < due_date:
-        return False
-    return True
+    return dt_exp >= due_date
 
 
 if __name__ == '__main__':
     args = parse_args()
-    logger = get_logger(args.output)
     for url in load_urls4check(args.source):
-        logger.info('{}\n  response_code_200: {}\n  is_paid_for_next_month: {}\n\n'.format(
+        print('{}\n  response_code_200: {}\n  is_paid_for_next_month: {}\n\n'.format(
             url, is_server_respond_with_200(url, args.no_redirects), is_paid_for_next_month(url)
         ))
 

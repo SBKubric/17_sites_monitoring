@@ -19,7 +19,7 @@ pip install -r requirements.txt
 
 ##File format
 
-The line format in file should be like this: `schema:url\n`.
+The urls in file schould be separated by `\n`.
 
 For example:
 
@@ -27,9 +27,10 @@ For example:
 
 ```
 http://www.google.com
-http://www.yandex.com
 http://www.rambler.com
-http://www.azaza.ru
+http://www.twitter.com
+https://www.atlassian.com/git/tutorials/git-hooks
+https://www.youtube.com/?gl=RU&hl=ru
 ```
 
 ##Example
@@ -37,20 +38,13 @@ http://www.azaza.ru
 **INPUT:**
 
 ```
-python3 check_sites_health.py urls -o result
+python3 check_sites_health.py urls
 ```
 
 **OUTPUT:**
 
-It will be located at `./result.log`
-
 ```
 http://www.google.com
-  response_code_200: True
-  is_paid_for_next_month: True
-
-
-http://www.yandex.com
   response_code_200: True
   is_paid_for_next_month: True
 
@@ -60,7 +54,17 @@ http://www.rambler.com
   is_paid_for_next_month: True
 
 
-http://www.azaza.ru
+http://www.twitter.com
+  response_code_200: True
+  is_paid_for_next_month: True
+
+
+https://www.atlassian.com
+  response_code_200: True
+  is_paid_for_next_month: True
+
+
+https://www.youtube.com
   response_code_200: True
   is_paid_for_next_month: True
 
